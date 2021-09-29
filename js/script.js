@@ -1,86 +1,91 @@
 "use strict"
+//Initierar knappar och inputfield samt input
 var calcButtons = document.querySelectorAll(".calcButton");
 var calcInputField = document.getElementById("calcInputField");
 var input = [0];
-var keys = [];
 calcInputField.innerHTML = input[0];
-
-for (let i = 0; i < calcButtons.length; i++) {
-    keys.push(calcButtons[i].value)
-}
-keys.push(",");
-
+//Tangentbord trycks
 window.addEventListener("keydown", (event) => {
-    console.log(event.key);
-
+    //Ändrar style
+    ChangeStyle(event.key);
+    //Man ska kunna skriva , eller . och alltid få rätt syntax "."
     if (event.key == "." || event.key == ",") {
-        keys.push(".");
+        input.push(".");
         calcInputField.innerHTML += ".";
     }
+    //Om input är ett nummer
     else if (!isNaN(event.key)) {
 
-        if (input[0] != 0) {
-            input.push(event.key);
-            calcInputField.innerHTML += event.key;
+        if (input[0] == 0) {
+            InitNumber(event.key);
         }
-        else{
-            input[0] = event.key;
-            calcInputField.innerHTML = event.key;
+        else {
+            AddNumber(event.key);
         }
     }
+    //Om input är en operator
     else if (event.key == "+" || event.key == "-" || event.key == "*" || event.key == "/") {
-        keys.push(event.key);
-        calcInputField.innerHTML += event.key;
+        AddNumber(event.key);
     }
+    //C för clear
     else if (event.key.toLocaleLowerCase() == "c") {
         Reset();
     }
+    //Enter för att beräkna
     else if (event.key == "Enter") {
         Calculate();
     }
+    //Ta bort sista siffran 
     else if (event.key == "Delete" || event.key == "Backspace") {
         Delete();
     }
-    else {
-        console.log(event.key);
-    }
-
 });
-
-window.addEventListener("keyup", () => {
-
+//Tangent otrycks
+window.addEventListener("keyup", (event) => {
+    11
+    ChangeBackStyle(event.key);
 });
-
+//Knappar
 calcButtons.forEach(item => {
     item.addEventListener('click', () => {
-        var tempValue = item.value;
 
-        if (tempValue == "=") {
+        if (item.value == "=") {
             Calculate();
         }
-        else if (tempValue == "C") {
+        else if (item.value == "C") {
             Reset();
         }
-        else if(tempValue == "DEL"){
+        else if (item.value == "DEL") {
             Delete();
         }
         else {
             if (input[0] == 0) {
-                input[0] = item.value;
-                calcInputField.innerHTML = tempValue;
+                InitNumber(item.value);
             }
             else {
-                input.push(item.value);
-                calcInputField.innerHTML += tempValue;
+                AddNumber(item.value);
             }
-            
+
         }
     });
 });
 //Beräknar arrayen
 function Calculate() {
+
+
     calcInputField.innerHTML = eval(input.join(""));
     input = [calcInputField.innerHTML];
+
+}
+//Initierar en beräkning med det första talet
+function InitNumber(s) {
+    input[0] = s;
+    calcInputField.innerHTML = s;
+}
+
+function AddNumber(s) {
+    input.push(s);
+    calcInputField.innerHTML += s;
 }
 
 function Reset() {
@@ -88,7 +93,7 @@ function Reset() {
     calcInputField.innerHTML = input[0];
 }
 
-function Delete(){
+function Delete() {
 
     input.splice(-1);
     calcInputField.innerHTML = "";
@@ -99,5 +104,35 @@ function Delete(){
         input.push("0");
         calcInputField.innerHTML = 0;
     }
-    
+
+}
+
+function ChangeStyle(input) {
+
+    if (input == ",") {
+        input = ".";
+    }
+
+    calcButtons.forEach(item => {
+        if (input == item.value) {
+            item.style.backgroundColor = "tan";
+            console.log("Changed style");
+        }
+    });
+
+
+}
+
+function ChangeBackStyle() {
+
+    if (input == ",") {
+        input = ".";
+    }
+
+    calcButtons.forEach(item => {
+        if (input == item.value) {
+            item.style.backgroundColor = "";
+            console.log("Changed back style");
+        }
+    });
 }
