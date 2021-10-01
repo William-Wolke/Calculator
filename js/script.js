@@ -7,7 +7,7 @@ calcInputField.innerHTML = input[0];
 //Tangentbord trycks
 window.addEventListener("keydown", (event) => {
     //Ändrar style
-    ChangeStyle(event.key);
+    ChangeStyle(event.key, 1);
     //Man ska kunna skriva , eller . och alltid få rätt syntax "."
     if (event.key == "." || event.key == ",") {
         input.push(".");
@@ -21,6 +21,7 @@ window.addEventListener("keydown", (event) => {
         }
         else {
             AddNumber(event.key);
+            document.getElementById("knapp1").click();
         }
     }
     //Om input är en operator
@@ -42,8 +43,7 @@ window.addEventListener("keydown", (event) => {
 });
 //Tangent otrycks
 window.addEventListener("keyup", (event) => {
-    11
-    ChangeBackStyle(event.key);
+    ChangeStyle(event.key, 0);
 });
 //Knappar
 calcButtons.forEach(item => {
@@ -84,8 +84,10 @@ function InitNumber(s) {
 }
 
 function AddNumber(s) {
-    input.push(s);
+    if (input.length <= 31) {
+        input.push(s);
     calcInputField.innerHTML += s;
+    }
 }
 
 function Reset() {
@@ -104,35 +106,33 @@ function Delete() {
         input.push("0");
         calcInputField.innerHTML = 0;
     }
+}
+
+function CorrectInput(input) {
 
 }
 
-function ChangeStyle(input) {
+function ChangeStyle(input, keypress) {
 
     if (input == ",") {
         input = ".";
     }
-
-    calcButtons.forEach(item => {
-        if (input == item.value) {
-            item.style.backgroundColor = "tan";
-            console.log("Changed style");
-        }
-    });
-
-
-}
-
-function ChangeBackStyle() {
-
-    if (input == ",") {
-        input = ".";
+    else if (input == "Enter"){
+        input = "="
+    }
+    else if (input == "c") {
+        input = "C"
     }
 
     calcButtons.forEach(item => {
         if (input == item.value) {
-            item.style.backgroundColor = "";
-            console.log("Changed back style");
+            if (keypress == 1) {
+                item.style.backgroundColor = "lightblue";
+            }
+            else {
+                item.style.backgroundColor = "";
+            }
+            
         }
     });
 }
