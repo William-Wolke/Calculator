@@ -21,7 +21,6 @@ window.addEventListener("keydown", (event) => {
         }
         else {
             AddNumber(event.key);
-            document.getElementById("knapp1").click();
         }
     }
     //Om input är en operator
@@ -122,6 +121,9 @@ function ChangeStyle(input, keypress) {
     }
     else if (input == "c") {
         input = "C"
+    }
+    else if (input == "Delete" || input == "Backspace") {
+        input = "DEL";
     }
 
     calcButtons.forEach(item => {
